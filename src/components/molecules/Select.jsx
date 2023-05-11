@@ -32,7 +32,7 @@ const SelectOptions = styled.div`
     margin-top: 4px;
     background-color: white;
     position: absolute;
-    bottom: ${props => props.selectbottom - 34}px; 
+    bottom: ${props => props.selectbottom - 34}px; // 상단 selectbox 너비 30px + box 2개분 border 4px
     margin: ${props => props.portal ? `0 0 0 22px` : `41px 0 0 0`};
 
     > option {
