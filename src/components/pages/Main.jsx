@@ -85,8 +85,8 @@ function Main() {
         <div className="selects">
             <h1>Selects</h1>
             <div className="selectContainer">
-                <Select state={selectState01} setter={setSelectState01} dataList={dataList} usePortal={true}/>
-                <Select state={selectState02} setter={setSelectState02} dataList={dataList} />
+                <Select state={selectState01} setter={setSelectState01} dataList={dataList} isPortal={true}/>
+                <Select state={selectState02} setter={setSelectState02} dataList={dataList} isPortal={false}/>
             </div>
         </div>
     </div>

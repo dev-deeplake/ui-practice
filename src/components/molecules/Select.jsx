@@ -2,6 +2,8 @@ import { styled } from 'styled-components';
 import { IconCaretDown, IconCaretUp } from '../atoms/Icons';
 import * as sVar from "../atoms/defaultVars";
 import React from 'react';
+import ReactDOM from 'react-dom'
+import { useRef, useEffect, useState } from 'react';
 
 const SelectWrap = styled.div`
     display: flex;
@@ -25,10 +27,13 @@ const SelectOptions = styled.div`
     box-sizing: border-box;
     width: 300px;
     height: auto;
-    border-radius: 0 0 6px 6px;
+    border-radius: 6px;
     border: 2px solid #eee;
     margin-top: 4px;
     background-color: white;
+    position: absolute;
+    bottom: ${props => props.selecttop - 165}px;
+    margin: ${props => props.isPortal ? `0 0 0 22px` : `40px 0 0 0`};
 
     > option {
         box-sizing: border-box;
@@ -44,8 +49,23 @@ const SelectOptions = styled.div`
     }
 `
 
+export const SelectPortal = ({ children }) => {
+    const portalRoot = document.getElementById("portal");
 
-export function Select({state, setter, dataList, usePortal}) {
+    return ReactDOM.createPortal(children, portalRoot)
+}
+
+
+export function Select({state, setter, dataList, isPortal}) {
+    const selectRef = useRef(null);
+    const [selecttop, setSelectTop] = useState(0)
+
+    useEffect(() => {
+        const node = ReactDOM.findDOMNode(selectRef.current);
+        const rect = Math.floor(node.getBoundingClientRect().bottom)
+        setSelectTop(rect)
+    }, [])
+
     const openSetter = () => {
         setter({...state, isOpen:(!state.isOpen)})
     }
@@ -54,15 +74,24 @@ export function Select({state, setter, dataList, usePortal}) {
     }
     const component = (
         <SelectWrap>
-            <SelectStyle onClick={openSetter}>
+            <SelectStyle id="position-element" ref={selectRef} onClick={openSetter}>
                 {state.selected}
                 {state.isOpen ? <IconCaretUp /> : <IconCaretDown />}
             </SelectStyle>
-                { state.isOpen &&
-                    <SelectOptions>
+            {   
+                (isPortal && state.isOpen) && 
+                    (<SelectPortal>  
+                        <SelectOptions isPortal={isPortal} selecttop={selecttop}>
+                            {dataList.map(data => <option onClick={selectSetter}>{data}</option>)}
+                        </SelectOptions>
+                    </SelectPortal>)
+            }
+            {
+                (!isPortal && state.isOpen) &&
+                    (<SelectOptions isPortal={isPortal}>
                         {dataList.map(data => <option onClick={selectSetter}>{data}</option>)}
-                    </SelectOptions>
-                }
+                    </SelectOptions>)
+            }
         </SelectWrap>
     )
     return component;
