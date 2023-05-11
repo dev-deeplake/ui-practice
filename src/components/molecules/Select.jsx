@@ -32,9 +32,8 @@ const SelectOptions = styled.div`
     margin-top: 4px;
     background-color: white;
     position: absolute;
-    ${props => console.log(props)}
-    bottom: ${props => props.selectBottom - 30}px;
-    margin: ${props => props.isPortal ? `0 0 0 22px` : `41px 0 0 0`};
+    bottom: ${props => props.selectbottom - 34}px; 
+    margin: ${props => props.portal ? `0 0 0 22px` : `41px 0 0 0`};
 
     > option {
         box-sizing: border-box;
@@ -57,9 +56,9 @@ export const SelectPortal = ({ children }) => {
 }
 
 
-export function Select({state, setter, dataList, isPortal}) {
+export function Select({state, setter, dataList, portal}) {
     const selectRef = useRef(null);
-    const [selectBottom, setSelectBottom] = useState(0)
+    const [selectbottom, setSelectBottom] = useState(0)
 
     useEffect(() => {
         const node = ReactDOM.findDOMNode(selectRef.current);
@@ -80,17 +79,17 @@ export function Select({state, setter, dataList, isPortal}) {
                 {state.isOpen ? <IconCaretUp /> : <IconCaretDown />}
             </SelectStyle>
             {   
-                (isPortal && state.isOpen) && 
+                (portal && state.isOpen) && 
                     (<SelectPortal>  
-                        <SelectOptions isPortal={isPortal} selectBottom={selectBottom}>
-                            {dataList.map(data => <option onClick={selectSetter}>{data}</option>)}
+                        <SelectOptions portal={portal} selectbottom={selectbottom}>
+                            {dataList.map((data, i) => <option key={i} onClick={selectSetter}>{data}</option>)}
                         </SelectOptions>
                     </SelectPortal>)
             }
             {
-                (!isPortal && state.isOpen) &&
-                    (<SelectOptions isPortal={isPortal}>
-                        {dataList.map(data => <option onClick={selectSetter}>{data}</option>)}
+                (!portal && state.isOpen) &&
+                    (<SelectOptions portal={portal}>
+                        {dataList.map((data, i) => <option key={i} onClick={selectSetter}>{data}</option>)}
                     </SelectOptions>)
             }
         </SelectWrap>
