@@ -32,7 +32,8 @@ const SelectOptions = styled.div`
     margin-top: 4px;
     background-color: white;
     position: absolute;
-    bottom: ${props => props.selecttop - 165}px;
+    ${props => console.log(props)}
+    bottom: ${props => props.selectBottom - 30}px;
     margin: ${props => props.isPortal ? `0 0 0 22px` : `40px 0 0 0`};
 
     > option {
@@ -58,12 +59,12 @@ export const SelectPortal = ({ children }) => {
 
 export function Select({state, setter, dataList, isPortal}) {
     const selectRef = useRef(null);
-    const [selecttop, setSelectTop] = useState(0)
+    const [selectBottom, setSelectBottom] = useState(0)
 
     useEffect(() => {
         const node = ReactDOM.findDOMNode(selectRef.current);
         const rect = Math.floor(node.getBoundingClientRect().bottom)
-        setSelectTop(rect)
+        setSelectBottom(rect)
     }, [])
 
     const openSetter = () => {
@@ -81,7 +82,7 @@ export function Select({state, setter, dataList, isPortal}) {
             {   
                 (isPortal && state.isOpen) && 
                     (<SelectPortal>  
-                        <SelectOptions isPortal={isPortal} selecttop={selecttop}>
+                        <SelectOptions isPortal={isPortal} selectBottom={selectBottom}>
                             {dataList.map(data => <option onClick={selectSetter}>{data}</option>)}
                         </SelectOptions>
                     </SelectPortal>)
