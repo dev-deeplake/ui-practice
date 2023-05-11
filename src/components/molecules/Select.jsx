@@ -34,7 +34,7 @@ const SelectOptions = styled.div`
     position: absolute;
     ${props => console.log(props)}
     bottom: ${props => props.selectBottom - 30}px;
-    margin: ${props => props.isPortal ? `0 0 0 22px` : `40px 0 0 0`};
+    margin: ${props => props.isPortal ? `0 0 0 22px` : `41px 0 0 0`};
 
     > option {
         box-sizing: border-box;
